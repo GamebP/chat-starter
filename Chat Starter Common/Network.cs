@@ -6,17 +6,18 @@ namespace ChatStarterCommon
 {
     public static class Network
     {
+
         public static IPAddress GetLocalIPAddress()
         {
-            IPHostEntry hostEntry = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (IPAddress ipAddress in hostEntry.AddressList)
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
             {
-                if (ipAddress.AddressFamily == AddressFamily.InterNetwork)
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
                 {
-                    return ipAddress;
+                    return ip;
                 }
             }
-            return IPAddress.Parse("127.0.0.1");
+            throw new Exception("No network adapters with an IPv4 address in the system!");
         }
 
         public static bool TryParseIPAddress(string @string, out IPAddress ipAddress)
@@ -34,8 +35,7 @@ namespace ChatStarterCommon
             return true;
         }
 
-        public static string GenerateIPAddressString(string ipAddressStringMask = "x.x.x.x",
-            string randomPartSymbol = "x")
+        public static string GenerateIPAddressString(string ipAddressStringMask = "x.x.x.x", string randomPartSymbol = "x")
         {
             try
             {
@@ -60,6 +60,7 @@ namespace ChatStarterCommon
 
             return string.Join(".", ipAddressStringParts);
         }
+
 
         public static int GeneratePort(int min = 0, int max = 65535)
         {

@@ -138,7 +138,7 @@ namespace ChatStarterClient
                 textBox_localIPAddress.Text = Network.GetLocalIPAddress().ToString();
                 return;
             }
-            textBox_localIPAddress.Text = Network.GenerateIPAddressString("127.x.x.x");
+            textBox_localIPAddress.Text = Network.GenerateIPAddressString("x.x.x.x");
         }
 
         private void GenerateLocalPort()

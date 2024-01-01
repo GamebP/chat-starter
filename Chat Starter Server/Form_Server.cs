@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using ChatStarterCommon;
 using ChatStarterServer.Properties;
 using System.Threading;
+using System.IO;
 
 namespace ChatStarterServer
 {
@@ -16,11 +17,97 @@ namespace ChatStarterServer
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         bool _listeningBlinkState = false;
 
+        // ip and port config
+        private const string ConfigFilePath = "server_config.cfg";
+
         public Form_Server()
         {
             InitializeComponent();
+            LoadIPAddressAndPortFromConfig();
             SetStatus(Status.Initial);
             GenerateIPAdress(chooseLocalIPAddress: true);
+
+            _confirmationTimer = new System.Windows.Forms.Timer(); // Specify the namespace
+            _confirmationTimer.Interval = 1000;
+            _confirmationTimer.Tick += _confirmationTimer_Tick;
+            _confirmationTimer.Start();
+        }
+
+        private void UpdateConfigFile(string ipAddress, string port)
+        {
+            try
+            {
+                // Update the config file with the new values
+                using (StreamWriter sw = new StreamWriter(ConfigFilePath))
+                {
+                    sw.WriteLine("ip=" + ipAddress); // Update IP address
+                    sw.WriteLine("port=" + port);    // Update port
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating config file: {ex.Message}");
+            }
+        }
+
+        private void LoadIPAddressAndPortFromConfig()
+        {
+            try
+            {
+                if (File.Exists(ConfigFilePath))
+                {
+                    string[] lines = File.ReadAllLines(ConfigFilePath);
+
+                    string configFileIp = null;
+                    string configFilePort = null;
+
+                    foreach (string line in lines)
+                    {
+                        if (line.StartsWith("ip="))
+                        {
+                            configFileIp = line.Substring(3);
+                            // Extract IP address after 'ip='
+                        }
+                        else if (line.StartsWith("port="))
+                        {
+                            configFilePort = line.Substring(5);
+                            // Extract port after 'port='
+                        }
+                    }
+
+                    if (configFileIp != null && configFilePort != null)
+                    {
+                        // Confirmation dialog to overwrite old IP and port with the values from config
+                        DialogResult dialogResult = MessageBox.Show("Do you want to overwrite the current IP and port with the values from the config file?",
+                            "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            textBox_ipAddress.Text = configFileIp;
+                            textBox_port.Text = configFilePort;
+                            UpdateConfigFile(configFileIp, configFilePort); // Update config with loaded values
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Config file not found! Creating a new one with default values.");
+
+                    // Create a new config file with default values
+                    using (StreamWriter sw = File.CreateText(ConfigFilePath))
+                    {
+                        sw.WriteLine("ip=127.0.0.1"); // Default IP address
+                        sw.WriteLine("port=8080");    // Default port
+                        textBox_ipAddress.Text = "127.0.0.1"; // Set default IP in the textbox
+                        textBox_port.Text = "8080";          // Set default port in the textbox
+                        UpdateConfigFile("127.0.0.1", "8080"); // Update config with default values
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error reading or creating config file: {ex.Message}");
+            }
         }
 
         #region Common Methods
@@ -34,8 +121,8 @@ namespace ChatStarterServer
                     label_status.ForeColor = Color.Gray;
                     label_status.Image = Resources.bullet_black;
                     label_localEndPoint.Text = string.Empty;
-                    textBox_ipAddress.ReadOnly = true;
-                    textBox_port.ReadOnly = true;
+                    textBox_ipAddress.ReadOnly = false; /* Default true */
+                    textBox_port.ReadOnly = false; /* Default true */
                     listBox_clients.Items.Clear();
                     button_start.Enabled = true;
                     button_stop.Enabled = false;
@@ -46,8 +133,8 @@ namespace ChatStarterServer
                     label_status.Text = "Listening...";
                     label_status.ForeColor = Color.Green;
                     label_status.Image = Resources.bullet_green;
-                    textBox_ipAddress.ReadOnly = false;
-                    textBox_port.ReadOnly = false;
+                    textBox_ipAddress.ReadOnly = true; /* Default false */
+                    textBox_port.ReadOnly = true; /* Default false */
                     button_start.Enabled = false;
                     button_stop.Enabled = true;
                     timer_listeningBlink.Start();
@@ -238,6 +325,21 @@ namespace ChatStarterServer
         private void label_port_Click(object sender, EventArgs e)
         {
             GeneratePort();
+        }
+
+        private void _confirmationTimer_Tick(object sender, EventArgs e)
+        {
+            _confirmationTimer.Stop(); // Stop the timer once it ticks
+
+            // Show a confirmation dialog to overwrite old IP and port with the values from config
+            DialogResult dialogResult = MessageBox.Show("Do you want to overwrite the current IP and port with the values from the config file?",
+                "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (dialogResult == DialogResult.Yes)
+            {
+                // Load IP and port from config without self-checking
+                LoadIPAddressAndPortFromConfig();
+            }
         }
     }
 }

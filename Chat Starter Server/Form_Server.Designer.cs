@@ -47,6 +47,7 @@
             this.button_start = new System.Windows.Forms.Button();
             this.button_stop = new System.Windows.Forms.Button();
             this.timer_listeningBlink = new System.Windows.Forms.Timer(this.components);
+            this._confirmationTimer = new System.Windows.Forms.Timer(this.components);
             this.statusStrip_main.SuspendLayout();
             this.groupBox_localEndPoint.SuspendLayout();
             this.groupBox_activity.SuspendLayout();
@@ -88,14 +89,14 @@
             this.label_ipAddress.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label_ipAddress.Location = new System.Drawing.Point(15, 23);
             this.label_ipAddress.Name = "label_ipAddress";
-            this.label_ipAddress.Size = new System.Drawing.Size(63, 13);
+            this.label_ipAddress.Size = new System.Drawing.Size(61, 13);
             this.label_ipAddress.TabIndex = 0;
             this.label_ipAddress.Text = "IP Address:";
             this.label_ipAddress.Click += new System.EventHandler(this.label_ipAddress_Click);
             // 
             // textBox_ipAddress
             // 
-            this.textBox_ipAddress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.textBox_ipAddress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_ipAddress.Location = new System.Drawing.Point(18, 39);
             this.textBox_ipAddress.Name = "textBox_ipAddress";
@@ -110,7 +111,7 @@
             this.label_port.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label_port.Location = new System.Drawing.Point(463, 23);
             this.label_port.Name = "label_port";
-            this.label_port.Size = new System.Drawing.Size(31, 13);
+            this.label_port.Size = new System.Drawing.Size(29, 13);
             this.label_port.TabIndex = 2;
             this.label_port.Text = "Port:";
             this.label_port.Click += new System.EventHandler(this.label_port_Click);
@@ -126,7 +127,7 @@
             // 
             // groupBox_localEndPoint
             // 
-            this.groupBox_localEndPoint.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBox_localEndPoint.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox_localEndPoint.Controls.Add(this.textBox_port);
             this.groupBox_localEndPoint.Controls.Add(this.label_port);
@@ -141,8 +142,8 @@
             // 
             // groupBox_activity
             // 
-            this.groupBox_activity.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBox_activity.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox_activity.Controls.Add(this.listBox_clients);
             this.groupBox_activity.Controls.Add(this.label_log);
@@ -157,7 +158,7 @@
             // 
             // listBox_clients
             // 
-            this.listBox_clients.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.listBox_clients.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.listBox_clients.FormattingEnabled = true;
             this.listBox_clients.Location = new System.Drawing.Point(19, 35);
@@ -176,8 +177,8 @@
             // 
             // textBox_log
             // 
-            this.textBox_log.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.textBox_log.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_log.Location = new System.Drawing.Point(212, 35);
             this.textBox_log.Multiline = true;
@@ -192,7 +193,7 @@
             this.label_clients.AutoSize = true;
             this.label_clients.Location = new System.Drawing.Point(16, 19);
             this.label_clients.Name = "label_clients";
-            this.label_clients.Size = new System.Drawing.Size(43, 13);
+            this.label_clients.Size = new System.Drawing.Size(41, 13);
             this.label_clients.TabIndex = 0;
             this.label_clients.Text = "Clients:";
             // 
@@ -284,6 +285,7 @@
         private System.Windows.Forms.ErrorProvider errorProvider_main;
         private System.Windows.Forms.ToolStripStatusLabel label_localEndPoint;
         private System.Windows.Forms.Timer timer_listeningBlink;
+        private System.Windows.Forms.Timer _confirmationTimer;
     }
 }
 
